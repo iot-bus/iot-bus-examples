@@ -37,32 +37,7 @@
 // If using the breakout, change pins as desired
 Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_MOSI, TFT_CLK, TFT_RST, TFT_MISO);
 
-void setup(void) {
-  Serial.begin(115200);
 
-  pinMode(33, OUTPUT);
-  digitalWrite(33, HIGH);
-
-  tft.begin();
-  
-  yield();
-
-  Serial.print("Initializing SD card...");
-  if (!SD_MMC.begin("/sdcard")) {
-    Serial.println("failed!");
-  }
-  Serial.println("OK!");
-
-  tft.setRotation(1);
-  tft.fillScreen(ILI9341_BLUE);
-  //for(int8_t i=-2; i<1; i++) {
-    bmpDraw("/tiger.bmp",
-      0,
-      0);
-}
-
-void loop() {
-}
 
 // This function opens a Windows Bitmap (BMP) file and
 // displays it at the given coordinates.  It's sped up
@@ -73,6 +48,27 @@ void loop() {
 // good balance.
 
 #define BUFFPIXEL 20
+
+// These read 16- and 32-bit types from the SD card file.
+// BMP data is stored little-endian, Arduino is little-endian too.
+// May need to reverse subscript order if porting elsewhere.
+
+uint16_t read16(File &f) {
+  uint16_t result;
+  ((uint8_t *)&result)[0] = f.read(); // LSB
+  ((uint8_t *)&result)[1] = f.read(); // MSB
+  return result;
+}
+
+uint32_t read32(File &f) {
+  uint32_t result;
+  ((uint8_t *)&result)[0] = f.read(); // LSB
+  ((uint8_t *)&result)[1] = f.read();
+  ((uint8_t *)&result)[2] = f.read();
+  ((uint8_t *)&result)[3] = f.read(); // MSB
+  return result;
+}
+
 
 void bmpDraw(char *filename, int16_t x, int16_t y) {
 
@@ -204,22 +200,29 @@ void bmpDraw(char *filename, int16_t x, int16_t y) {
   if(!goodBmp) Serial.println(F("BMP format not recognized."));
 }
 
-// These read 16- and 32-bit types from the SD card file.
-// BMP data is stored little-endian, Arduino is little-endian too.
-// May need to reverse subscript order if porting elsewhere.
+void setup(void) {
+  Serial.begin(115200);
 
-uint16_t read16(File &f) {
-  uint16_t result;
-  ((uint8_t *)&result)[0] = f.read(); // LSB
-  ((uint8_t *)&result)[1] = f.read(); // MSB
-  return result;
+  pinMode(33, OUTPUT);
+  digitalWrite(33, HIGH);
+
+  tft.begin();
+  
+  yield();
+
+  Serial.print("Initializing SD card...");
+  if (!SD_MMC.begin("/sdcard")) {
+    Serial.println("failed!");
+  }
+  Serial.println("OK!");
+
+  tft.setRotation(1);
+  tft.fillScreen(ILI9341_BLUE);
+  //for(int8_t i=-2; i<1; i++) {
+    bmpDraw("/tiger.bmp",
+      0,
+      0);
 }
 
-uint32_t read32(File &f) {
-  uint32_t result;
-  ((uint8_t *)&result)[0] = f.read(); // LSB
-  ((uint8_t *)&result)[1] = f.read();
-  ((uint8_t *)&result)[2] = f.read();
-  ((uint8_t *)&result)[3] = f.read(); // MSB
-  return result;
+void loop() {
 }
