@@ -19,6 +19,7 @@
   modified 8 Sep 2016
   by Colby Newman
 */
+#include <arduino.h>
 
 #define LEDPin 5
 
