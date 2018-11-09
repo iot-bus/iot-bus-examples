@@ -174,19 +174,6 @@ void testFileIO(fs::FS &fs, const char * path){
 
 void setup(){
     Serial.begin(115200);
-
-//    pinMode(12, PULLUP);
-//    gpio_pullup_en((gpio_num_t)12);
-//    pinMode(13, PULLUP);
-//    gpio_pullup_en((gpio_num_t)13);
-//    pinMode(14, PULLUP);
-//    gpio_pullup_en((gpio_num_t)14);
-//    pinMode(15, PULLUP);
-//    gpio_pullup_en((gpio_num_t)15);
-//    pinMode(2, PULLUP);
-//    gpio_pullup_en((gpio_num_t)2);
-//    pinMode(4, PULLUP);
-//    gpio_pullup_en((gpio_num_t)4);
     
     if(!SD_MMC.begin("/sdcard")){
         Serial.println("Card Mount Failed");

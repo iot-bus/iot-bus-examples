@@ -37,8 +37,6 @@
 // If using the breakout, change pins as desired
 Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_MOSI, TFT_CLK, TFT_RST, TFT_MISO);
 
-
-
 // This function opens a Windows Bitmap (BMP) file and
 // displays it at the given coordinates.  It's sped up
 // by reading many pixels worth of data at a time
@@ -46,8 +44,6 @@ Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_MOSI, TFT_CLK, TFT_R
 // size takes more of the Arduino's precious RAM but
 // makes loading a little faster.  20 pixels seems a
 // good balance.
-
-#define BUFFPIXEL 20
 
 // These read 16- and 32-bit types from the SD card file.
 // BMP data is stored little-endian, Arduino is little-endian too.
@@ -69,6 +65,7 @@ uint32_t read32(File &f) {
   return result;
 }
 
+#define BUFFPIXEL 20
 
 void bmpDraw(char *filename, int16_t x, int16_t y) {
 
@@ -216,13 +213,17 @@ void setup(void) {
   }
   Serial.println("OK!");
 
-  tft.setRotation(1);
-  tft.fillScreen(ILI9341_BLUE);
-  //for(int8_t i=-2; i<1; i++) {
-    bmpDraw("/tiger.bmp",
-      0,
-      0);
 }
 
 void loop() {
+  //for(uint8_t r=0; r<4; r++) {
+    tft.setRotation(1);
+    tft.fillScreen(ILI9341_BLUE);
+    //for(int8_t i=-2; i<1; i++) {
+      bmpDraw("/oddWires-Logo-7-320-240.bmp",
+        0,
+        0);
+        delay(2000);
+    //}
+  //}
 }
